@@ -2,36 +2,30 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function Home() {
-    const url = `https://api.spaceflightnewsapi.net/v4/articles/4`
-    const [results, setResults] = useState(null)
+    const url = `https://api.spaceflightnewsapi.net/v4/articles`
+    const [news, setNews] = useState(null)
 
     useEffect(() => {
         axios.get(url)
             .then(response => {
-                setResults(response.data)
+                console.log(response.data)
+                setNews(response.data)
             })
     }, [url])
 
-    if(results) {
+    if(news) {
 
         return (
             <div className="flex flex-col">
                 <React.Fragment>
-                    <h1 className="text-2xl font-bold mb-3"> 
-                        {results.title} 
-                    </h1>
-                    <div>
-                        <img className="scale-50"
-                            src={results.image_url}
-                            alt={results.title}
-                        />
+                {news.results.map(item => (
+                    <div key={item.id}>
+                        <h2 className="font-bold text-xl mb-3">{item.title}</h2>
+                        <h3 className="font-bold text-xl mb-3"> From: {item.news_site}</h3>
+                        <a className="font-bold" href={item.url}>Read more</a>
+                        <img src={item.image_url} alt={item.title} />
                     </div>
-                    <div className="font-bold text-xl mb-3">
-                        From: {results.news_site}
-                    </div>
-                    <div className="font-bold text-xl mb-3">
-                        
-                    </div>
+                ))}
                 </React.Fragment>
             </div>
         )
