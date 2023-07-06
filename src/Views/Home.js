@@ -3,22 +3,43 @@ import axios from "axios";
 
 function Home() {
     const url = `https://api.spaceflightnewsapi.net/v4/articles`
-    const [news, setNews] = useState(null)
+    const [news, setNews] = useState({
+        data: null,
+        error: false
+    })
 
     useEffect(() => {
         axios.get(url)
             .then(response => {
                 console.log(response.data)
-                setNews(response.data)
+                setNews({
+                    data: response.data,
+                    error: false
+                })
+            })
+            .catch(() => {
+                setNews({
+                    data: null,
+                    error: true
+                })
             })
     }, [url])
 
-    if(news) {
+    if(news.error) {
+        return (
+            <div>
+                <React.Fragment>
+                    <p> There seems to have been an error. </p>
+                </React.Fragment>
+            </div>
+        )
+    }
 
+    if(news.data) {
         return (
             <div className="flex flex-col">
                 <React.Fragment>
-                {news.results.map(item => (
+                {news.data.results.map(item => (
                     <div key={item.id}>
                         <h2 className="font-bold text-xl mb-3">{item.title}</h2>
                         <h3 className="font-bold text-xl mb-3"> From: {item.news_site}</h3>
@@ -29,7 +50,6 @@ function Home() {
                 </React.Fragment>
             </div>
         )
-
     }
 
     return (
