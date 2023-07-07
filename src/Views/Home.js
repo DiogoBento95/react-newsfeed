@@ -17,7 +17,8 @@ function Home() {
                     error: false
                 })
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error("Error fetching news:", error);
                 setNews({
                     data: null,
                     error: true
@@ -37,14 +38,14 @@ function Home() {
 
     if(news.data) {
         return (
-            <div className="flex flex-col">
+            <div className="flex flex-col bg-gray-200">
                 <React.Fragment>
                 {news.data.results.map(item => (
-                    <div key={item.id}>
-                        <h2 className="font-bold text-xl mb-3">{item.title}</h2>
-                        <h3 className="font-bold text-xl mb-3"> From: {item.news_site}</h3>
-                        <a className="font-bold" href={item.url}>Read more</a>
-                        <img src={item.image_url} alt={item.title} />
+                    <div key={item.id} className="mb-6 border-b-2 border-black last:border-b-0 flex flex-col items-center">
+                        <h3 className="m-2 font-bold text-2xl mb-3"> From: {item.news_site}</h3>
+                        <h2 className="m-2 font-bold text-xl mb-3">{item.title}</h2>
+                        <img src={item.image_url} alt={item.title} className="w-1/2 mt-2 border-4 border-black shadow-lg rounded-md"/>
+                        <a className="m-2 my-6 font-bold text-amber-600 border-4 rounded-md px-3 py-1 border-amber-600 bg-gray-950" href={item.url}>Read more</a>
                     </div>
                 ))}
                 </React.Fragment>
